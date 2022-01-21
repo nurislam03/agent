@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetTasks(t *testing.T) {
-	api := NewAPI(nil, memory.NewTaskStore())
+	api := NewAPI(nil, memory.NewTaskStore(), nil)
 	testdata := []struct {
 		des    string
 		role   string
@@ -55,7 +55,7 @@ func TestGetTasks(t *testing.T) {
 }
 
 func TestGetChatHistory(t *testing.T) {
-	api := NewAPI(nil, memory.NewTaskStore())
+	api := NewAPI(nil, memory.NewTaskStore(), nil)
 	testdata := []struct {
 		des    string
 		role   string
@@ -70,7 +70,7 @@ func TestGetChatHistory(t *testing.T) {
 			userID: "1",
 			taskID: "1",
 			code:   http.StatusOK,
-			resp:   `{"data":[{"id":"000000000000000000000000","messageId":"1","task_id":"1","body":"This is a coding challenge","file_ref_id":"https://upload.wikimedia.org/wikipedia/commons/f/f9/Flag_of_Bangladesh.svg","actor_type":"customer","actor_id":"1","created_at":"<<PRESENCE>>","updated_at":"<<PRESENCE>>"},{"id":"000000000000000000000000","messageId":"2","task_id":"1","body":"Looking into it","file_ref_id":"https://upload.wikimedia.org/wikipedia/commons/f/f9/Flag_of_Bangladesh.svg","actor_type":"operator","actor_id":"1","created_at":"<<PRESENCE>>","updated_at":"<<PRESENCE>>"}],"meta":{"current_page":1,"per_page":10,"total_page":0,"total":0}}`,
+			resp:   `{"data":[{"id":"000000000000000000000000","messageId":"1","task_id":"1","body":"This is a coding challenge","file_ref_id":"12345","actor_type":"customer","actor_id":"1","created_at":"<<PRESENCE>>","updated_at":"<<PRESENCE>>"},{"id":"000000000000000000000000","messageId":"2","task_id":"1","body":"Looking into it","file_ref_id":"12345","actor_type":"operator","actor_id":"1","created_at":"<<PRESENCE>>","updated_at":"<<PRESENCE>>"}],"meta":{"current_page":1,"per_page":10,"total_page":0,"total":0}}`,
 		},
 		{
 			des:    "successfully get chat history by customer",
@@ -78,7 +78,7 @@ func TestGetChatHistory(t *testing.T) {
 			userID: "1",
 			taskID: "1",
 			code:   http.StatusOK,
-			resp:   `{"data":[{"id":"000000000000000000000000","messageId":"1","task_id":"1","body":"This is a coding challenge","file_ref_id":"https://upload.wikimedia.org/wikipedia/commons/f/f9/Flag_of_Bangladesh.svg","actor_type":"customer","actor_id":"1","created_at":"<<PRESENCE>>","updated_at":"<<PRESENCE>>"},{"id":"000000000000000000000000","messageId":"2","task_id":"1","body":"Looking into it","file_ref_id":"https://upload.wikimedia.org/wikipedia/commons/f/f9/Flag_of_Bangladesh.svg","actor_type":"operator","actor_id":"1","created_at":"<<PRESENCE>>","updated_at":"<<PRESENCE>>"}],"meta":{"current_page":1,"per_page":10,"total_page":0,"total":0}}`,
+			resp:   `{"data":[{"id":"000000000000000000000000","messageId":"1","task_id":"1","body":"This is a coding challenge","file_ref_id":"12345","actor_type":"customer","actor_id":"1","created_at":"<<PRESENCE>>","updated_at":"<<PRESENCE>>"},{"id":"000000000000000000000000","messageId":"2","task_id":"1","body":"Looking into it","file_ref_id":"12345","actor_type":"operator","actor_id":"1","created_at":"<<PRESENCE>>","updated_at":"<<PRESENCE>>"}],"meta":{"current_page":1,"per_page":10,"total_page":0,"total":0}}`,
 		},
 		{
 			des:    "invalid role",
@@ -112,7 +112,7 @@ func TestGetChatHistory(t *testing.T) {
 }
 
 func TestGetFile(t *testing.T) {
-	api := NewAPI(nil, memory.NewTaskStore())
+	api := NewAPI(nil, memory.NewTaskStore(), memory.NewObjectStore())
 	testdata := []struct {
 		des       string
 		role      string

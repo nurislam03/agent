@@ -38,8 +38,9 @@ func init() {
 func serve(cmd *cobra.Command, args []string) {
 	cfg := config.NewConfig()
 	tsk := memory.NewTaskStore()
+	obj := memory.NewObjectStore()
 
-	api := api.NewAPI(cfg, tsk)
+	api := api.NewAPI(cfg, tsk, obj)
 
 	backend.NewServer(cfg, api).Serve()
 }

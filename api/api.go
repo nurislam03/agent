@@ -15,14 +15,16 @@ type API struct {
 	router   chi.Router
 	cfg      *config.Config
 	task   repo.Task
+	objectStore repo.ObjectStore
 }
 
 // NewAPI ...
-func NewAPI(cfg *config.Config, tsk repo.Task) *API {
+func NewAPI(cfg *config.Config, tsk repo.Task, obj repo.ObjectStore) *API {
 	api := &API{
 		router:   chi.NewRouter(),
 		cfg:      cfg,
 		task: tsk,
+		objectStore: obj,
 	}
 
 	api.register()

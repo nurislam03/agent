@@ -1,14 +1,13 @@
 package api
 
 import (
+	"bytes"
 	"errors"
-	"fmt"
 	"github.com/go-chi/chi"
 	"github.com/nurislam03/agent/model"
 	"io"
 	"net/http"
 	"strings"
-	"time"
 )
 
 // @route  GET api/v1/tasks
@@ -126,37 +125,23 @@ func (a *API) getFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//task id that pssed throught he request param and the task id that is associated in the message file we want to download is the same. if not through an error
+	//task id that passed throughout he requests param and the task id that is associated in the message file we want to download is the same. if not through an error
 	if tskID != msg.TaskID {
 		handleAPIError(w, newAPIError("forbidden request", errForbiddenRequest, err))
 		return
 	}
 
-	// url of the the file we want to download (resource link of s3 bucket)
-	url := msg.FileRefID
-
-	//url := "https://upload.wikimedia.org/wikipedia/commons/f/f9/Flag_of_Bangladesh.svg"
-
-	//url := "https://docs.google.com/viewer?url=https://www.computer-pdf.com/pdf/0669-introduction-to-calculus-volume-1.pdf"
-
-	//url := "https://qtxasset.com/styles/breakpoint_xl_880px_w/s3/fiercebiotech/1638804283/BD.jpg/BD.jpg?VersionId=KG.fYNvmT7iQrKh_jdqPSGFP4a7AzDgl&itok=j1CYMpXC"
-
-	resp, err := http.Get(url)
+	// url of the file we want to download (resource link of s3 bucket)
+	obj, err := a.objectStore.GetObject(msg.FileRefID)
 	if err != nil {
-		http.Error(w, "could not write response", http.StatusInternalServerError)
+		handleAPIError(w, newAPIError("file store error", errInternalServer, err))
 		return
 	}
-	defer resp.Body.Close()
-
-	//logger.Info(resp.Header.Get("Content-Type"))
-	//logger.Info(resp.Header.Get("Content-Disposition"))
 
 	// Setting header for the response file
-	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "file"))
-	w.Header().Set("Content-Type", resp.Header.Get("Content-Type"))
-	w.Header().Set("Last-Modified", time.Now().UTC().Format(http.TimeFormat))
+	w.Header().Set("Content-Type", http.DetectContentType(obj))
 
-	_, err = io.Copy(w, resp.Body)
+	_, err = io.Copy(w, bytes.NewReader(obj))
 	if err != nil {
 		http.Error(w, "could not read body", http.StatusInternalServerError)
 		return
