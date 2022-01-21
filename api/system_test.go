@@ -9,7 +9,7 @@ import (
 )
 
 func TestSystemCheck(t *testing.T) {
-	api := NewAPI(nil)
+	api := NewAPI(nil, nil)
 
 	t.Run("system check", func(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/api/v1/system/check", nil)
@@ -21,7 +21,7 @@ func TestSystemCheck(t *testing.T) {
 }
 
 func TestSystemPanic(t *testing.T) {
-	api := NewAPI(nil)
+	api := NewAPI(nil, nil)
 
 	t.Run("system panic", func(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/api/v1/system/panic", nil)
@@ -33,7 +33,7 @@ func TestSystemPanic(t *testing.T) {
 }
 
 func TestSystemErr(t *testing.T) {
-	api := NewAPI(nil)
+	api := NewAPI(nil, nil)
 
 	t.Run("system err", func(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/api/v1/system/err", nil)
@@ -45,7 +45,7 @@ func TestSystemErr(t *testing.T) {
 }
 
 func TestSystemValidationErr(t *testing.T) {
-	api := NewAPI(nil)
+	api := NewAPI(nil, nil)
 
 	t.Run("system validation err", func(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/api/v1/system/verr", nil)

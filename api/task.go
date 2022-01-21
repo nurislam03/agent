@@ -16,7 +16,7 @@ import (
 func (a *API) getTasks(w http.ResponseWriter, r *http.Request) {
 	uRole := r.Header.Get("Role")
 	if uRole != string(model.Customer) && uRole != string(model.Operator) {
-		handleAPIError(w, newAPIError("invalid request", errInvalidData, errors.New("invalid header")))
+		handleAPIError(w, newAPIError("unprocessable entity", errInvalidData, errors.New("invalid header")))
 		return
 	}
 
@@ -49,6 +49,11 @@ func (a *API) getChatHistory(w http.ResponseWriter, r *http.Request) {
 	uRole := r.Header.Get("Role")
 	uID := r.Header.Get("UserID")
 
+	if uRole != string(model.Customer) && uRole != string(model.Operator) {
+		handleAPIError(w, newAPIError("unprocessable entity", errInvalidData, errors.New("invalid header")))
+		return
+	}
+
 	//getting the task id form the url param.
 	tskID := strings.TrimSpace(chi.URLParam(r, "task_id"))
 
@@ -62,7 +67,7 @@ func (a *API) getChatHistory(w http.ResponseWriter, r *http.Request) {
 
 		// checking whether the customer id associated with the task and the user who made the request is the same one or not.
 		if tsk.CustomerID != uID {
-			handleAPIError(w, newAPIError("unauthorized request", errInternalServer, err)) //Todo: handle error message and err tag
+			handleAPIError(w, newAPIError("forbidden request", errForbiddenRequest, err))
 			return
 		}
 	}
@@ -90,6 +95,11 @@ func (a *API) getFile(w http.ResponseWriter, r *http.Request) {
 	uRole := r.Header.Get("Role")
 	uID := r.Header.Get("UserID")
 
+	if uRole != string(model.Customer) && uRole != string(model.Operator) {
+		handleAPIError(w, newAPIError("unprocessable entity", errInvalidData, errors.New("invalid header")))
+		return
+	}
+
 	tskID := strings.TrimSpace(chi.URLParam(r, "task_id"))
 
 	//if the request came from a customer side then need to check (before pulling the chat message) that customer is the owner of that task.
@@ -102,7 +112,7 @@ func (a *API) getFile(w http.ResponseWriter, r *http.Request) {
 
 		// checking whether the customer id associated with the task and the user who made the request is the same one or not.
 		if tsk.CustomerID != uID {
-			handleAPIError(w, newAPIError("unauthorized request", errInternalServer, err)) //Todo: handle error message and err tag
+			handleAPIError(w, newAPIError("forbidden request", errForbiddenRequest, err))
 			return
 		}
 	}
@@ -118,7 +128,7 @@ func (a *API) getFile(w http.ResponseWriter, r *http.Request) {
 
 	//task id that pssed throught he request param and the task id that is associated in the message file we want to download is the same. if not through an error
 	if tskID != msg.TaskID {
-		handleAPIError(w, newAPIError("unauthorized access of data", errInternalServer, err))
+		handleAPIError(w, newAPIError("forbidden request", errForbiddenRequest, err))
 		return
 	}
 

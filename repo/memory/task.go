@@ -87,7 +87,7 @@ func NewTaskStore() *TaskStore {
 			"3": &model.Messages{
 				ID:        id,
 				MessageID: "3",
-				TaskID:    "1",
+				TaskID:    "2",
 				Body:      "Arrange an event",
 				FileRefID: "https://upload.wikimedia.org/wikipedia/commons/f/f9/Flag_of_Bangladesh.svg",
 				ActorType: string(model.Customer),
@@ -182,6 +182,10 @@ func (s TaskStore) GetChatHistory(tskID string, plimt, poffset int) ([]*model.Me
 
 	count := 0
 	for _, val := range s.mstore {
+		if val.TaskID != tskID {
+			continue
+		}
+
 		if count < poffset {
 			count++
 			continue

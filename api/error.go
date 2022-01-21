@@ -36,7 +36,6 @@ func (v validationError) extend(prefix string, err *validationError) {
 	}
 }
 
-
 var (
 	errBadRequest            = &errorCode{Code: "400001", Status: http.StatusBadRequest}
 	errURINotFound           = &errorCode{Code: "404001", Status: http.StatusNotFound}
@@ -45,6 +44,7 @@ var (
 	errInvalidData           = &errorCode{Code: "422001", Status: http.StatusUnprocessableEntity}
 	errInternalServer        = &errorCode{Code: "500001", Status: http.StatusInternalServerError}
 	errInternalServerNetPipe = &errorCode{Code: "500002", Status: http.StatusInternalServerError}
+	errForbiddenRequest      = &errorCode{Code: "403000", Status: http.StatusForbidden}
 )
 
 type apiErrors []apiError
