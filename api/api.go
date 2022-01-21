@@ -18,10 +18,11 @@ type API struct {
 }
 
 // NewAPI ...
-func NewAPI(cfg *config.Config) *API {
+func NewAPI(cfg *config.Config, tsk repo.Task) *API {
 	api := &API{
 		router:   chi.NewRouter(),
 		cfg:      cfg,
+		task: tsk,
 	}
 
 	api.register()

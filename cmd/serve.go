@@ -5,6 +5,7 @@ import (
 	"github.com/nurislam03/agent/api"
 	"github.com/nurislam03/agent/backend"
 	"github.com/nurislam03/agent/config"
+	"github.com/nurislam03/agent/repo/memory"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"net"
@@ -36,8 +37,9 @@ func init() {
 
 func serve(cmd *cobra.Command, args []string) {
 	cfg := config.NewConfig()
+	tsk := memory.NewTaskStore()
 
-	api := api.NewAPI(cfg)
+	api := api.NewAPI(cfg, tsk)
 
 	backend.NewServer(cfg, api).Serve()
 }

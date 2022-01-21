@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 	"github.com/go-chi/chi"
 	"github.com/nurislam03/agent/model"
@@ -14,6 +15,11 @@ import (
 // @desc   getTasks return all tasks based on user role
 func (a *API) getTasks(w http.ResponseWriter, r *http.Request) {
 	uRole := r.Header.Get("Role")
+	if uRole != string(model.Customer) && uRole != string(model.Operator) {
+		handleAPIError(w, newAPIError("invalid request", errInvalidData, errors.New("invalid header")))
+		return
+	}
+
 	uID := ""
 	//if the request is form the customer side then we need the user id to pull only those tasks that are created by that specific user.
 	if uRole == string(model.Customer) {
