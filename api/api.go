@@ -73,6 +73,7 @@ func (a *API) taskHandlers() http.Handler {
 	h.Group(func(r chi.Router) {
 		r.Get("/", a.getTasks)
 		r.Get("/{task_id}/chats", a.getChatHistory)
+		r.Get("/{task_id}/files/{message_id}", a.getFile)
 	})
 
 	return h
