@@ -127,7 +127,7 @@ github.com/modern-go/reflect2
 # github.com/pelletier/go-toml v1.9.4
 ## explicit; go 1.12
 github.com/pelletier/go-toml
-# github.com/pkg/errors v0.8.1
+# github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
@@ -189,6 +189,9 @@ go.etcd.io/etcd/client/pkg/v3/types
 # go.etcd.io/etcd/client/v2 v2.305.0
 ## explicit; go 1.16
 go.etcd.io/etcd/client/v2
+# go.mongodb.org/mongo-driver v1.8.2
+## explicit; go 1.10
+go.mongodb.org/mongo-driver/bson/primitive
 # go.opencensus.io v0.23.0
 ## explicit; go 1.13
 go.opencensus.io

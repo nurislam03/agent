@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/nurislam03/agent/config"
+	"github.com/nurislam03/agent/repo"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -13,6 +14,7 @@ import (
 type API struct {
 	router   chi.Router
 	cfg      *config.Config
+	task   repo.Task
 }
 
 // NewAPI ...
@@ -61,8 +63,18 @@ func (a *API) register() {
 
 func (a *API) registerRouter() {
 	a.router.Route("/api/v1", func(r chi.Router) {
+		r.Mount("/tasks", a.taskHandlers())
 		r.Mount("/system", a.systemHandlers())
 	})
+}
+
+func (a *API) taskHandlers() http.Handler {
+	h := chi.NewRouter()
+	h.Group(func(r chi.Router) {
+		r.Get("/", a.getTasks)
+	})
+
+	return h
 }
 
 func (a *API) systemHandlers() http.Handler {
